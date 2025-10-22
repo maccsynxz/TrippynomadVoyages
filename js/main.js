@@ -82,5 +82,45 @@
         }
     });
 
+    // contact submit
+    const form = document.getElementById('contactForm');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+
+        // Get form fields
+        const name = form.querySelector('#name').value.trim();
+        const email = form.querySelector('#email').value.trim();
+        const subject = form.querySelector('#subject').value.trim();
+        const message = form.querySelector('#message').value.trim();
+
+        // Validate before sending
+        if (!name || !email || !subject || !message) {
+            alert("⚠️ Please fill out all fields before submitting.");
+            return; // stop submission
+        }
+
+        // Optional: simple email format check
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (!emailPattern.test(email)) {
+            alert("⚠️ Please enter a valid email address.");
+            return;
+        }
+
+        // Submit to Google Form
+        fetch("https://docs.google.com/forms/u/0/d/e/1FAIpQLSe1tYKR6h42fkzBgDJyvkQjdFy6IppfvGqbMTAaFzfHvmVxUA/formResponse", {
+            method: "POST",
+            body: new FormData(form),
+            mode: "no-cors"
+        })
+            .then(() => {
+                alert("✅ Message sent successfully!");
+                form.reset();
+            })
+            .catch(() => {
+                alert("❌ There was a problem submitting the form.");
+            });
+    });
+
 })(jQuery);
 
